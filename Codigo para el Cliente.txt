@@ -1,0 +1,21 @@
+use super_tienda_jd;
+
+-- Seleccionar tabal
+select* from clientes;
+
+-- Seleccionar todos los registros de una tabla
+SELECT * FROM empleados;
+
+-- Insertar un registro completo
+INSERT INTO empleados (nombre, email, telefono, rol) 
+VALUES ('Mada', 'mada23@ejemplo.com', 2928282829, 'vendedor' );
+
+-- Actualizar un registro específico
+UPDATE empleados
+SET email = 'juanperes123@gmail.com'
+WHERE id = 1;
+
+
+-- Eliminar un registro específico
+DELETE FROM empleados 
+WHERE nombre = 'Ana';

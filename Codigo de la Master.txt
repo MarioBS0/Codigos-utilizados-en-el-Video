@@ -1,0 +1,153 @@
+CREATE DATABASE Super_tienda_JD;
+USE Super_tienda_JD;
+
+-- Tabla Clientes
+CREATE TABLE Clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    telefono VARCHAR(20),
+    direccion VARCHAR(100)
+);
+
+-- Insertar Clientes
+INSERT INTO Clientes (nombre, telefono, direccion) VALUES
+('Juan Pérez', '12345678', 'San Miguel'),
+('María Rodríguez', '76543210', 'Usulutan'),
+('Pedro González', '11111111', 'San Miguel'),
+('Ana Sánchez', '22222222', 'Usulutan'),
+('Luis Martínez', '33333333', 'San Miguel');
+
+-- Tabla Productos
+CREATE TABLE Productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_barra VARCHAR(20),
+    nombre VARCHAR(100),
+    costo DECIMAL(10,2),
+    precio DECIMAL(10,2),
+    iva DECIMAL(10,2),
+    utilidad DECIMAL(10,2),
+    categoria VARCHAR(50),
+    medidas VARCHAR(50),
+    presentacion VARCHAR(50),
+    vencimiento DATE
+);
+
+-- Insertar Productos
+INSERT INTO Productos (codigo_barra, nombre, costo, precio, iva, utilidad, categoria, medidas, presentacion, vencimiento) VALUES
+('123456789012', 'Coca-Cola', 1.00, 1.50, 0.13, 0.50, 'Bebidas', '600 ml', 'Botella', '2024-01-01'),
+('987654321012', 'Pepsi', 0.90, 1.40, 0.13, 0.50, 'Bebidas', '600 ml', 'Botella', '2024-02-01'),
+('111111111111', 'Manzanas', 0.50, 1.00, 0.13, 0.50, 'Frutas' ,'Kg', 'Caja', '2024-03-01'),
+('222222222222', 'Plátanos', 0.40, 0.80, 0.13, 0.40, 'Frutas','Kg', 'Caja', '2024-04-01'),
+('333333333333', 'Pan', 0.20, 0.50, 0.13, 0.30, 'Panadería','Unidad', 'Paquete', '2024-05-01');
+
+
+
+-- Tabla Ventas
+CREATE TABLE Ventas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero_documento VARCHAR(20),
+    tipo_documento VARCHAR(50),
+    fecha DATE,
+    cliente_id INT,
+    vendedor VARCHAR(100),
+    subtotal DECIMAL(10,2),
+    descuento DECIMAL(10,2),
+    iva DECIMAL(10,2),
+    total DECIMAL(10,2),
+    forma_pago VARCHAR(50),
+    FOREIGN KEY (cliente_id) REFERENCES Clientes(id)
+);
+
+-- Insertar Ventas
+INSERT INTO Ventas (numero_documento, tipo_documento, fecha, cliente_id, vendedor, subtotal, descuento, iva, total, forma_pago) VALUES
+('123456', 'Factura', '2023-12-10', 1, 'Juan', 10.00, 0.00, 1.30, 11.30, 'Efectivo'),
+('789012', 'Factura', '2023-12-11', 2, 'Pedro', 5.00, 0.00, 1.30, 6.30, 'Tarjeta de credito'),
+('345678', 'Factura', '2023-12-12', 3, 'Luis', 8.00, 0.00, 1.04, 9.04, 'Efectivo'),
+('901234', 'Factura', '2023-12-13', 4, 'Ana', 12.00, 0.00, 1.56, 13.56, 'Tarjeta'),
+('567890', 'Factura', '2023-12-14', 5, 'Luis', 15.00, 0.00, 1.95, 16.95, 'Efectivo');
+
+-- Tabla Detalle_ventas
+CREATE TABLE Detalle_ventas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    venta_id INT,
+    producto_id INT,
+    cantidad INT,
+    precio_unitario DECIMAL(10,2),
+    subtotal DECIMAL(10,2),
+    iva DECIMAL(10,2),
+    total DECIMAL(10,2),
+    FOREIGN KEY (venta_id) REFERENCES Ventas(id),
+    FOREIGN KEY (producto_id) REFERENCES Productos(id)
+);
+
+-- Insertar Detalle_ventas
+INSERT INTO Detalle_ventas (venta_id, producto_id, cantidad, precio_unitario, subtotal, iva, total) VALUES
+(1, 1, 2, 1.50, 3.00, 0.39, 3.39),
+(1, 2, 1, 1.40, 1.40, 0.18, 1.58),
+(2, 3, 3, 1.00, 3.00, 0.39, 3.39),
+(3, 4, 2, 2.00, 4.00, 0.52, 4.52),
+(4, 5, 1, 3.00, 3.00, 0.39, 3.39);
+
+-- Tabla Inventario
+CREATE TABLE Inventario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    cantidad INT,
+    fecha_recepcion DATE,
+    fecha_vencimiento DATE,
+    umbral INT DEFAULT 30
+);
+
+-- Insertar Inventario
+INSERT INTO Inventario (nombre, cantidad, fecha_recepcion, fecha_vencimiento) VALUES
+('Coca-Cola', 200, '2023-12-01', '2024-06-24'),
+('Pepsi', 200, '2023-12-02', '2024-07-12'),
+('Manzanas', 75, '2023-12-12', '2024-01-10'),
+('Plátanos', 75, '2023-12-12', '2024-01-10'),
+('Pan', 100, '2023-12-20', '2024-08-10');
+
+-- Tabla Proveedores
+CREATE TABLE Proveedores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    direccion VARCHAR(255),
+    telefono VARCHAR(20)
+);
+
+-- Insertar Proveedores
+INSERT INTO Proveedores (nombre, direccion, telefono) VALUES
+('Coca-Cola', 'San Salvador', '2222-8080'),
+('MARIPOSA EL SALVADOR', 'URBANIZACION Y BLVD. SANTA ELENA, C. CERRO VERDE PTE. NO. 53 ANTIGUO CUSCATLAN, LA LIBERTAD', '2248-5000'),
+('IMPORFRUT', 'KM.20 carretera a quezaltepeque complejo industrial, ofibodega bodega# 6, Nejapa CP 1101', '2524-6400'),
+('CENTA El Salvador', 'Km 33 1/2 Carretera a Santa Ana, Ciudad Arce, El Salvador', '2397 2200'),
+('BIMBO', 'Bodega San Miguel', '2424-1515');
+
+-- Tabla Empleados
+CREATE TABLE Empleados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    email VARCHAR(100),
+    telefono VARCHAR(20),
+    rol VARCHAR(50)
+);
+
+-- Insertar Empleados
+INSERT INTO Empleados (nombre, email, telefono, rol) VALUES
+('Juan', 'juan@gmail.com', '2020-4545', 'vendedor'),
+('Pedro', 'pedro@gmail.com', '1212-7878', 'vendedor'),
+('Luis', 'luis@gmail.com', '4545-8989', 'vendedor'),
+('Ana', 'ana@gmail.com', '4748-8487', 'vendedor'),
+('Antonio', 'antonio@gmail.com', '3232-8787', 'gerente');
+
+-----------------------------------------
+-- Usuarios
+CREATE USER 'ADMIN_JD'@26.168.181.39 IDENTIFIED BY 'kU$tr29g@me46yewc';
+GRANT ALL PRIVILEGES ON Super_tienda_JD.* TO 'ADMIN_JD'@26.168.181.39;
+FLUSH PRIVILEGES;
+
+-- GERENTE
+CREATE USER 'Antonio'@26.168.181.39 IDENTIFIED BY '12345678';
+GRANT SELECT, INSERT, UPDATE ON Super_tienda_JD.* TO 'Antonio'@26.168.181.39;
+
+
+REVOKE SELECT on Super_tienda_JD.* FROM 'Antonio'@26.168.181.39;
