@@ -140,14 +140,14 @@ INSERT INTO Empleados (nombre, email, telefono, rol) VALUES
 ('Antonio', 'antonio@gmail.com', '3232-8787', 'gerente');
 
 -----------------------------------------
--- Usuarios
-CREATE USER 'ADMIN_JD'@26.168.181.39 IDENTIFIED BY 'kU$tr29g@me46yewc';
-GRANT ALL PRIVILEGES ON Super_tienda_JD.* TO 'ADMIN_JD'@26.168.181.39;
+-- Usuarios para los usuarios en lugar de "%" debemos colocar la IP de la maquina cliente para mayor seguridad
+CREATE USER 'ADMIN_JD'@% IDENTIFIED BY 'kU$tr29g@me46yewc';
+GRANT ALL PRIVILEGES ON Super_tienda_JD.* TO 'ADMIN_JD'@%;
 FLUSH PRIVILEGES;
 
 -- GERENTE
-CREATE USER 'Antonio'@26.168.181.39 IDENTIFIED BY '12345678';
-GRANT SELECT, INSERT, UPDATE ON Super_tienda_JD.* TO 'Antonio'@26.168.181.39;
+CREATE USER 'Antonio'@% IDENTIFIED BY '12345678';
+GRANT SELECT, INSERT, UPDATE ON Super_tienda_JD.* TO 'Antonio'@%;
 
-
-REVOKE SELECT on Super_tienda_JD.* FROM 'Antonio'@26.168.181.39;
+-- Quitar Privilegios al usuario
+REVOKE SELECT on Super_tienda_JD.* FROM 'Antonio'@%;
